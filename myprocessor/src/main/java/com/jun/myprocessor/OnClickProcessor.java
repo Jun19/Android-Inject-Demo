@@ -32,6 +32,7 @@ public class OnClickProcessor extends AbstractProcessor {
             try {
                 JavaFileObject sourceFile = filer.createSourceFile("MyClickProcessor");
                 outputStream = sourceFile.openOutputStream();
+//                Proxy.newProxyInstance(, , )
                 outputStream.write(code.getBytes());
                 outputStream.flush();
             } catch (IOException e) {

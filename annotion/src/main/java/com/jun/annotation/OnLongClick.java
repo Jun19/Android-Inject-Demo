@@ -8,8 +8,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
+@AnnotationType(value = "setOnLongClickListener", eventClass = View.OnLongClickListener.class)
 @Retention(RetentionPolicy.RUNTIME)
-@AnnotationType(value = "setOnClickListener", eventClass = View.OnClickListener.class)
-public @interface OnClick {
+public @interface OnLongClick {
     int[] ids();//传入id
 }
