@@ -109,4 +109,45 @@ public class EventUtils {
             }
         }
     }
+
+    public static void inject3(Activity activity) {
+        Class<? extends Activity> aClass = activity.getClass();
+        Method[] declaredMethods = aClass.getDeclaredMethods();
+        for (Method method : declaredMethods) {
+            Annotation[] annotations = method.getDeclaredAnnotations();
+            for (Annotation annotation : annotations) {
+                Class<? extends Annotation> annotationType = annotation.annotationType();
+                if (annotationType.isAnnotationPresent(AnnotationType.class)) {
+                    AnnotationType annotation1 = annotationType.getAnnotation(AnnotationType.class);
+                    Class eventClass = annotation1.eventClass();
+                    String value = annotation1.value();
+                    Object proxyInstance = Proxy.newProxyInstance(activity.getClassLoader(), new Class[]{eventClass}, new InvocationHandler() {
+                        @Override
+                        public Object invoke(Object o, Method m, Object[] objects) throws Throwable {
+                            return method.invoke(activity, objects);
+                        }
+                    });
+                    //获取id
+                    try {
+                        Method ids = annotationType.getDeclaredMethod("ids");
+                        try {
+                            int[] idArray = (int[]) ids.invoke(annotation);
+                            for (int id : idArray) {
+                                View view = activity.findViewById(id);
+                                Method method1 = view.getClass().getMethod(value, eventClass);
+                                method1.invoke(view, proxyInstance);
+                            }
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        }
+    }
 }
