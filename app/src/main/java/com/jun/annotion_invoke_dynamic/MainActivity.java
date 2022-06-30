@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        EventUtils.inject3(this);
+        EventKt.INSTANCE.inject(this);
     }
 
     @OnClick(ids = {R.id.btn, R.id.btn2})
