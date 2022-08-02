@@ -43,6 +43,7 @@ public class EventUtils {
                     try {
                         Method method = annotationType.getDeclaredMethod("ids");
                         try {
+                            //拿到注解上面的值
                             int[] ids = (int[]) method.invoke(annotation);
                             for (int id : ids) {
                                 View view = activity.findViewById(id);
